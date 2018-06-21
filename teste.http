@@ -1,0 +1,14 @@
+### Adicionar um cliente
+POST http://localhost:9090/druuls/notes
+Content-Type:application/json
+
+{
+    "title" : "Davi",
+    "content" : "Teste"
+}
+
+### Ler
+GET http://localhost:9090/druuls/
+Content-Type:application/json
+
+###
