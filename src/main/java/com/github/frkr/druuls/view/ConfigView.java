@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Davi Saranszky Mesquita
+ * Copyright (c) 2018 Davi Saranszky Mesquita https://github.com/frkr/druuls
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,22 @@
  * SOFTWARE.
  */
 
-package com.github.frkr.druuls.repo;
+package com.github.frkr.druuls.view;
 
-import com.github.frkr.druuls.banco.Note;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-@Repository
-public interface NoteRepository extends JpaRepository<Note, Long> {
+@Component
+public class ConfigView {
 
+    @Value("${spring.datasource.url}")
+    private String banco;
+
+    public String getBanco() {
+        return banco;
+    }
+
+    public void setBanco(String banco) {
+        this.banco = banco;
+    }
 }

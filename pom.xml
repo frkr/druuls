@@ -49,6 +49,13 @@
     </properties>
 
     <dependencies>
+        <!-- Drools -->
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-compiler</artifactId>
+            <version>6.2.0.Final</version>
+        </dependency>
+
         <!-- join faces primefaces -->
         <dependency>
             <groupId>org.joinfaces</groupId>

@@ -22,15 +22,33 @@
  * SOFTWARE.
  */
 
-package com.github.frkr.druuls;
+package com.github.frkr.druuls.view;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
 
-@SpringBootApplication
-public class DruulsApplication {
+@Component
+public class HelloWorld {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DruulsApplication.class, args);
+    private String firstName = "John";
+    private String lastName = "Doe";
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String showGreeting() {
+        return "Hello " + firstName + " " + lastName + "!";
     }
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Davi Saranszky Mesquita
+ * Copyright (c) 2018 Davi Saranszky Mesquita https://github.com/frkr/druuls
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -57,7 +57,7 @@ public class SwaggerConfig {
     private ApiInfo getApiInfo() {
         return new ApiInfo(
                 "Druuls",
-                "REST Drools",
+                "Drools",
                 "beta",
                 "https://github.com/frkr/druuls",
                 new Contact("Davi Saranszky Mesquita", "https://github.com/frkr/druuls", "davimesquita@gmail.com"),

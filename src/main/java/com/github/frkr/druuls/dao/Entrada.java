@@ -22,40 +22,26 @@
  * SOFTWARE.
  */
 
-package com.github.frkr.druuls.banco;
+package com.github.frkr.druuls.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
+import java.util.Map;
 import java.util.Objects;
 
-@Entity
-@Table(name = "notes")
-//@EntityListeners(AuditingEntityListener.class) // FIXME Tentativa de usar LastModifiedDate
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Audited
-public class Note implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Entrada {
+
     private Long id;
-
-    @NotBlank
-    private String title;
-
-    @NotBlank
-    private String content;
+    private Map<String, String> values;
 
     @Override
     public String toString() {
-        return "Note{" +
+        return "Entrada{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
+                ", values=" + values +
                 '}';
     }
 
@@ -63,14 +49,15 @@ public class Note implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Note note = (Note) o;
-        return Objects.equals(id, note.id);
+        Entrada json = (Entrada) o;
+        return Objects.equals(id, json.id) &&
+                Objects.equals(values, json.values);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id);
+        return Objects.hash(id, values);
     }
 
     public Long getId() {
@@ -81,20 +68,11 @@ public class Note implements Serializable {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public Map<String, String> getValues() {
+        return values;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setValues(Map<String, String> values) {
+        this.values = values;
     }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Davi Saranszky Mesquita
+ * Copyright (c) 2018 Davi Saranszky Mesquita https://github.com/frkr/druuls
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,32 @@
 
 package com.github.frkr.druuls.rest;
 
-import com.github.frkr.druuls.banco.Note;
+import com.github.frkr.druuls.dao.Entrada;
+import com.github.frkr.druuls.dao.Saida;
+import org.kie.api.KieServices;
+import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.FactHandle;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api")
-public class Teste {
-    @RequestMapping(value = "custom", method = RequestMethod.GET)
-    public Note custom() {
-        return new Note();
+public class Drools {
+    @RequestMapping(value = "rule", method = RequestMethod.POST)
+    public Saida rule(@RequestBody Entrada entrada) {
+        KieServices ks = KieServices.Factory.get();
+        KieContainer kContainer = ks.getKieClasspathContainer();
+        KieSession kSession = kContainer.newKieSession("ksession-rules");
+
+        kSession.insert(entrada);
+
+        Saida saida = new Saida();
+        FactHandle factSaida = kSession.insert(saida);
+
+        kSession.fireAllRules();
+        return (Saida) kSession.getObject(factSaida);
     }
 }

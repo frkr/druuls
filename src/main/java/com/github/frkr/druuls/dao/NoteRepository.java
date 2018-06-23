@@ -22,15 +22,13 @@
  * SOFTWARE.
  */
 
-package com.github.frkr.druuls;
+package com.github.frkr.druuls.dao;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.github.frkr.druuls.banco.Note;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@SpringBootApplication
-public class DruulsApplication {
+@Repository
+public interface NoteRepository extends JpaRepository<Note, Long> {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DruulsApplication.class, args);
-    }
 }

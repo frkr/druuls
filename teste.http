@@ -1,14 +1,17 @@
 ### Adicionar um cliente
-POST http://localhost:9090/druuls/notes
+POST http://localhost:9090/druuls/api/rule
 Content-Type:application/json
 
 {
-    "title" : "Davi",
-    "content" : "Teste"
+  "id" : 1,
+  "values" : {
+    "Cenario" : "501",
+    "Nome" : "davi"
+  }
 }
 
 ### Ler
-GET http://localhost:9090/druuls/
-Content-Type:application/json
+#GET http://localhost:9090/druuls/
+#Content-Type:application/json
 
 ###

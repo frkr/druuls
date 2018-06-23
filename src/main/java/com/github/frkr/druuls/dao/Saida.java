@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Davi Saranszky Mesquita
+ * Copyright (c) 2018 Davi Saranszky Mesquita https://github.com/frkr/druuls
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,33 +22,47 @@
  * SOFTWARE.
  */
 
-package com.github.frkr.druuls.model;
+package com.github.frkr.druuls.dao;
 
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-@Component
-public class HelloWorld {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
-    private String firstName = "John";
-    private String lastName = "Doe";
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Saida {
 
-    public String getFirstName() {
-        return firstName;
+    private Map<String, String> values = new HashMap<>();
+
+    @Override
+    public String toString() {
+        return "Saida{" +
+                "values=" + values +
+                '}';
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Saida saida = (Saida) o;
+        return Objects.equals(values, saida.values);
     }
 
-    public String getLastName() {
-        return lastName;
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(values);
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public Map<String, String> getValues() {
+        return values;
     }
 
-    public String showGreeting() {
-        return "Hello " + firstName + " " + lastName + "!";
+    public void setValues(Map<String, String> values) {
+        this.values = values;
     }
 }

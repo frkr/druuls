@@ -2,7 +2,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2018 Davi Saranszky Mesquita https://github.com/frkr/druuls
+  ~ Copyright (c) 2018 Davi Saranszky Mesquita
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,9 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
-<!DOCTYPE html [
-        <!ENTITY nbsp "&#160;">
-        <!ENTITY bull "&#8226;">
-        <!ENTITY copy "&#169;">
-        ]>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-<h:head>
-    <title>Druuls</title>
-</h:head>
-<h:body>
-    <p:panel header="Links" style="margin-bottom:20px;">
-        <p:panelGrid columns="2" cellpadding="10">
-            <h:outputText value="Documentação"/>
-            <a target="_blank" href="#{request.contextPath}/swagger-ui.html#/drools/ruleUsingPOST">Swagger</a>
-            <h:outputText value="Acesso ao Banco"/>
-            <a target="_blank" href="#{request.contextPath}/h2">H2</a>
-            <h:outputText value="URL"/>
-            <h:outputText value="#{configView.banco}"/>
-        </p:panelGrid>
-    </p:panel>
-    <ui:insert name="conteudo"/>
-</h:body>
-</html>
+
+<kmodule xmlns="http://jboss.org/kie/6.0.0/kmodule">
+    <kbase name="rules" packages="rules">
+        <ksession name="ksession-rules"/>
+    </kbase>
+</kmodule>
