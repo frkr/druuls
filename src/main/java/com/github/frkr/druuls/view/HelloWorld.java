@@ -25,30 +25,17 @@
 package com.github.frkr.druuls.view;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
+
+import javax.annotation.PostConstruct;
 
 @Component
+@SessionScope
 public class HelloWorld {
 
-    private String firstName = "John";
-    private String lastName = "Doe";
-
-    public String getFirstName() {
-        return firstName;
+    @PostConstruct
+    public void init() {
+        System.out.println("AE MAE");
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String showGreeting() {
-        return "Hello " + firstName + " " + lastName + "!";
-    }
 }

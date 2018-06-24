@@ -22,34 +22,62 @@
  * SOFTWARE.
  */
 
-package com.github.frkr.druuls.rest;
+package com.github.frkr.druuls.banco;
 
-import com.github.frkr.druuls.dao.Entrada;
-import com.github.frkr.druuls.dao.Saida;
-import org.kie.api.KieServices;
-import org.kie.api.runtime.KieContainer;
-import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.rule.FactHandle;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.envers.Audited;
 
-@RestController
-@RequestMapping("api")
-public class Drools {
-    @RequestMapping(value = "rule", method = RequestMethod.POST)
-    public Saida rule(@RequestBody Entrada entrada) {
-        KieServices ks = KieServices.Factory.get();
-        KieContainer kContainer = ks.getKieClasspathContainer();
-        KieSession kSession = kContainer.newKieSession("ksession-rules");
+import javax.persistence.*;
+import java.util.Objects;
 
-        kSession.insert(entrada);
+@Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Audited
+public class Rule {
 
-        Saida saida = new Saida();
-        FactHandle factSaida = kSession.insert(saida);
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        kSession.fireAllRules();
-        return (Saida) kSession.getObject(factSaida);
+    @Lob
+    @Column
+    private String drl;
+
+    @Override
+    public String toString() {
+        return "Rule{" +
+                "id=" + id +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rule rule = (Rule) o;
+        return Objects.equals(id, rule.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDrl() {
+        return drl;
+    }
+
+    public void setDrl(String drl) {
+        this.drl = drl;
     }
 }

@@ -1,5 +1,12 @@
 # Druuls
 
+# Executando
+```bash
+mvn spring-boot:run
+```
+
+[http://localhost:9090/druuls/](http://localhost:9090/druuls/)
+
 # Tecnologias
 
 1. Spring Boot

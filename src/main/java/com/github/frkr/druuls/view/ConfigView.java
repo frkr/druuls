@@ -26,8 +26,10 @@ package com.github.frkr.druuls.view;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.ApplicationScope;
 
 @Component
+@ApplicationScope
 public class ConfigView {
 
     @Value("${spring.datasource.url}")

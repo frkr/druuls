@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Davi Saranszky Mesquita
+ * Copyright (c) 2018 Davi Saranszky Mesquita https://github.com/frkr/druuls
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-//package com.github.frkr.druuls.rest;
+//package com.github.frkr.druuls.dao;
 //
-//import com.github.frkr.druuls.banco.Note;
+//import com.github.frkr.druuls.banco.Rule;
 //import org.springframework.data.repository.PagingAndSortingRepository;
 //import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 //
-//@RepositoryRestResource(path = "notes")
-//public interface NoteRestRepository extends PagingAndSortingRepository<Note, Long> {
+//@RepositoryRestResource(path = "/api/rules")
+//public interface RuleRepositoryRest extends PagingAndSortingRepository<Rule, Long> {
 //}

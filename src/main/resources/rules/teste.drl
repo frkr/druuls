@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-package test;
 import com.github.frkr.druuls.dao.Entrada
 import com.github.frkr.druuls.dao.Saida
 

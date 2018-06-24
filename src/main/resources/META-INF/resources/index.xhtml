@@ -2,7 +2,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2018 Davi Saranszky Mesquita
+  ~ Copyright (c) 2018 Davi Saranszky Mesquita https://github.com/frkr/druuls
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -31,29 +31,11 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <ui:composition template="/template/template.xhtml">
     <ui:define name="conteudo">
-        <h:form id="helloworld-form" prependId="false">
 
-            <p:panel header="PrimeFaces Hello World Example">
-                <h:panelGrid columns="2" cellpadding="4">
-                    <h:outputText value="First Name: "/>
-                    <p:inputText id="first-name" value="#{helloWorld.firstName}"/>
-
-                    <h:outputText value="Last Name: "/>
-                    <p:inputText id="last-name" value="#{helloWorld.lastName}"/>
-
-                    <p:commandButton id="submit" value="Submit"
-                                     update="greeting-panel"
-                                     oncomplete="PF('greetingDialog').show()"/>
-                </h:panelGrid>
-            </p:panel>
-
-            <p:dialog header="Greeting" widgetVar="greetingDialog" modal="true" resizable="false">
-                <h:panelGrid id="greeting-panel" columns="1" cellpadding="4">
-                    <h:outputText value="#{helloWorld.showGreeting()}"/>
-                </h:panelGrid>
-            </p:dialog>
+        <h:form id="formRule" prependId="false">
 
         </h:form>
+
     </ui:define>
 </ui:composition>
 </html>
