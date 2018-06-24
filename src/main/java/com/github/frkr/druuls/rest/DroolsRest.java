@@ -44,11 +44,67 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api")
 public class DroolsRest {
 
+    private static String myRule = "import com.github.frkr.druuls.dao.Entrada\n" +
+            "import com.github.frkr.druuls.dao.Saida\n" +
+            "\n" +
+            "// DECLARAR TODOS OS TIPOS\n" +
+            "declare  Perfil\n" +
+            "    Nome : String\n" +
+            "    Cenario : Integer\n" +
+            "end\n" +
+            "\n" +
+            "declare Aprovacao\n" +
+            "    Cenario : Integer\n" +
+            "    Aprovado : Boolean\n" +
+            "end\n" +
+            "\n" +
+            "rule \"Entrada\"\n" +
+            "no-loop\n" +
+            "    when\n" +
+            "        entrada : Entrada()\n" +
+            "    then\n" +
+            "        // PEGAR TODOS OS VALORES DA ENTRADA\n" +
+            "        // INICIALIZAR TODOS OS TIPOS\n" +
+            "        Perfil perfil = new Perfil();\n" +
+            "        perfil.setNome(entrada.getValues().get(\"Nome\"));\n" +
+            "        perfil.setCenario( Integer.parseInt( entrada.getValues().get(\"Cenario\") ) );\n" +
+            "        insert(perfil);\n" +
+            "        Aprovacao aprovacao = new Aprovacao();\n" +
+            "        aprovacao.setCenario(null);\n" +
+            "        aprovacao.setAprovado(false);\n" +
+            "        insert(aprovacao);\n" +
+            "end\n" +
+            "\n" +
+            "rule \"Saida\"\n" +
+            "no-loop\n" +
+            "    when\n" +
+            "        saida : Saida()\n" +
+            "        v : Aprovacao()\n" +
+            "    then\n" +
+            "        // ESCOLHER UM TIPO PARA SER A SAIDA\n" +
+            "        saida.getValues().put(\"Cenario\", v.getCenario()+\"\");\n" +
+            "        saida.getValues().put(\"Aprovado\", v.getAprovado()+\"\");\n" +
+            "        update(saida);\n" +
+            "end\n" +
+            "\n" +
+            "// COLOCAR UMA OU MAIS REGRAS DE USUARIO\n" +
+            "\n" +
+            "rule \"Regra do Usuario\"\n" +
+            "no-loop\n" +
+            "    when\n" +
+            "        perfil : Perfil( Cenario > 500 )\n" +
+            "        aprovacao : Aprovacao()\n" +
+            "    then\n" +
+            "        aprovacao.setCenario(perfil.getCenario());\n" +
+            "        aprovacao.setAprovado(true);\n" +
+            "        update(aprovacao);\n" +
+            "end\n";
+
     @RequestMapping(value = "execute", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Saida execute(@RequestBody Entrada entrada) throws Exception {
         KieSession ks = null;
         try {
-            ks = initDrools();
+            ks = initDrools(myRule);
             ks.insert(entrada);
 
             Saida saida = new Saida();
@@ -63,66 +119,10 @@ public class DroolsRest {
         }
     }
 
-    private static KieSession initDrools() throws Exception {
-        String myRule = "import com.github.frkr.druuls.dao.Entrada\n" +
-                "import com.github.frkr.druuls.dao.Saida\n" +
-                "\n" +
-                "// DECLARAR TODOS OS TIPOS\n" +
-                "declare  Perfil\n" +
-                "    Nome : String\n" +
-                "    Cenario : Integer\n" +
-                "end\n" +
-                "\n" +
-                "declare Aprovacao\n" +
-                "    Cenario : Integer\n" +
-                "    Aprovado : Boolean\n" +
-                "end\n" +
-                "\n" +
-                "rule \"Entrada\"\n" +
-                "no-loop\n" +
-                "    when\n" +
-                "        entrada : Entrada()\n" +
-                "    then\n" +
-                "        // PEGAR TODOS OS VALORES DA ENTRADA\n" +
-                "        // INICIALIZAR TODOS OS TIPOS\n" +
-                "        Perfil perfil = new Perfil();\n" +
-                "        perfil.setNome(entrada.getValues().get(\"Nome\"));\n" +
-                "        perfil.setCenario( Integer.parseInt( entrada.getValues().get(\"Cenario\") ) );\n" +
-                "        insert(perfil);\n" +
-                "        Aprovacao aprovacao = new Aprovacao();\n" +
-                "        aprovacao.setCenario(null);\n" +
-                "        aprovacao.setAprovado(false);\n" +
-                "        insert(aprovacao);\n" +
-                "end\n" +
-                "\n" +
-                "rule \"Saida\"\n" +
-                "no-loop\n" +
-                "    when\n" +
-                "        saida : Saida()\n" +
-                "        v : Aprovacao()\n" +
-                "    then\n" +
-                "        // ESCOLHER UM TIPO PARA SER A SAIDA\n" +
-                "        saida.getValues().put(\"Cenario\", v.getCenario()+\"\");\n" +
-                "        saida.getValues().put(\"Aprovado\", v.getAprovado()+\"\");\n" +
-                "        update(saida);\n" +
-                "end\n" +
-                "\n" +
-                "// COLOCAR UMA OU MAIS REGRAS DE USUARIO\n" +
-                "\n" +
-                "rule \"Regra do Usuario\"\n" +
-                "no-loop\n" +
-                "    when\n" +
-                "        perfil : Perfil( Cenario > 500 )\n" +
-                "        aprovacao : Aprovacao()\n" +
-                "    then\n" +
-                "        aprovacao.setCenario(perfil.getCenario());\n" +
-                "        aprovacao.setAprovado(true);\n" +
-                "        update(aprovacao);\n" +
-                "end\n";
-
+    public static KieSession initDrools(String rule) throws Exception {
         KieServices kieServices = KieServices.Factory.get();
         KieFileSystem kfs = kieServices.newKieFileSystem();
-        kfs.write("src/main/resources/rule.drl", kieServices.getResources().newByteArrayResource(myRule.getBytes()));
+        kfs.write("src/main/resources/rule.drl", kieServices.getResources().newByteArrayResource(rule.getBytes()));
         KieBuilder kieBuilder = kieServices.newKieBuilder(kfs).buildAll();
 
         Results results = kieBuilder.getResults();

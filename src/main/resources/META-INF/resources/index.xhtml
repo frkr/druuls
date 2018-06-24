@@ -33,9 +33,43 @@
     <ui:define name="conteudo">
 
         <h:form id="formRule" prependId="false">
+            <p:commandButton value="Atualizar" ajax="false" partialSubmit="false" />
+
+            <p:panel header="Tipos" toggleable="true" style="margin-bottom:20px;">
+                <p:dataGrid value="#{ruleView.variaveis}" var="tipo" columns="12">
+                    <f:facet name="footer">
+                        <p:panelGrid columns="2" cellpadding="10">
+                            <p:outputLabel value="Usar objeto de saída:"/>
+                            <p:selectOneMenu value="#{ruleView.saida}">
+                                <f:selectItems value="#{ruleView.tipos}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                    </f:facet>
+                    <p:panel header="#{tipo.key}">
+                        <table cellpadding="10" cellspacing="0" border="1">
+                            <p:repeat value="#{tipo.value}" var="variavel">
+                                <tr>
+                                    <td>
+                                        <h:outputText value="#{variavel.key}"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{variavel.value}"/>
+                                    </td>
+                                </tr>
+                            </p:repeat>
+                        </table>
+                    </p:panel>
+                </p:dataGrid>
+            </p:panel>
+            <p:panel header="Regras" toggleable="true" style="margin-bottom:20px;"/>
+            <p:panel header="Mensagens de Erro" style="margin-bottom:20px;" toggleable="true" collapsed="true">
+                <p:inputTextarea id="kieErros" cols="100" rows="5" value="#{ruleView.erros}"/>
+            </p:panel>
+            <p:panel header="DRL" toggleable="true" collapsed="true">
+                <p:inputTextarea id="codigoFonte" cols="100" rows="30" value="#{ruleView.rule}"/>
+            </p:panel>
 
         </h:form>
-
     </ui:define>
 </ui:composition>
 </html>
