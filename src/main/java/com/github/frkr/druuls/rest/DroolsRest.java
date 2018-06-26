@@ -24,7 +24,9 @@
 
 package com.github.frkr.druuls.rest;
 
+import com.github.frkr.druuls.banco.Rule;
 import com.github.frkr.druuls.dao.Entrada;
+import com.github.frkr.druuls.dao.RuleRepository;
 import com.github.frkr.druuls.dao.Saida;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
@@ -34,6 +36,7 @@ import org.kie.api.builder.Results;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api")
 public class DroolsRest {
 
+    //region Regra Exemplo
     private static String myRule = "import com.github.frkr.druuls.dao.Entrada\n" +
             "import com.github.frkr.druuls.dao.Saida\n" +
             "\n" +
@@ -99,12 +103,17 @@ public class DroolsRest {
             "        aprovacao.setAprovado(true);\n" +
             "        update(aprovacao);\n" +
             "end\n";
+    //endregion
+
+    @Autowired
+    private RuleRepository dao;
 
     @RequestMapping(value = "execute", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Saida execute(@RequestBody Entrada entrada) throws Exception {
+        Rule rule = dao.getOne(entrada.getId());
         KieSession ks = null;
         try {
-            ks = initDrools(myRule);
+            ks = initDrools(rule.getDrl());
             ks.insert(entrada);
 
             Saida saida = new Saida();

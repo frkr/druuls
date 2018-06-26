@@ -32,44 +32,79 @@
 <ui:composition template="/template/template.xhtml">
     <ui:define name="conteudo">
 
-        <h:form id="formRule" prependId="false">
-            <p:commandButton value="Atualizar" ajax="false" partialSubmit="false" />
+        <p:panel header="ID">
+            <h:outputText value="#{ruleView.idGerado}"/>
+        </p:panel>
 
-            <p:panel header="Tipos" toggleable="true" style="margin-bottom:20px;">
-                <p:dataGrid value="#{ruleView.variaveis}" var="tipo" columns="12">
-                    <f:facet name="footer">
-                        <p:panelGrid columns="2" cellpadding="10">
-                            <p:outputLabel value="Usar objeto de saída:"/>
-                            <p:selectOneMenu value="#{ruleView.saida}">
-                                <f:selectItems value="#{ruleView.tipos}"/>
-                            </p:selectOneMenu>
-                        </p:panelGrid>
-                    </f:facet>
-                    <p:panel header="#{tipo.key}">
+        <p:panel header="Tipos" toggleable="true" style="margin-bottom:20px;" collapsed="false">
+            <p:dataGrid value="#{ruleView.variaveis}" var="tipo" columns="12" rows="10" paginator="true"
+                        paginatorAlwaysVisible="true">
+                <f:facet name="footer">
+                    <p:panelGrid columns="2" cellpadding="10">
+                        <p:outputLabel value="Usar objeto de saída:"/>
+                        <p:selectOneMenu value="#{ruleView.saida}">
+                            <f:selectItems value="#{ruleView.tipos}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                </f:facet>
+                <p:panel header="#{tipo.key}">
+                    <table cellpadding="10" cellspacing="0" border="1">
+                        <p:repeat value="#{tipo.value}" var="variavel">
+                            <tr>
+                                <td>
+                                    <h:outputText value="#{variavel.key}"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="#{variavel.value}"/>
+                                </td>
+                            </tr>
+                        </p:repeat>
+                    </table>
+                </p:panel>
+            </p:dataGrid>
+        </p:panel>
+        <p:panel header="Regras" toggleable="true" style="margin-bottom:20px;" collapsed="false">
+            <p:dataGrid value="#{ruleView.fatos}" var="fato" columns="1" rows="1" paginator="true"
+                        paginatorAlwaysVisible="true">
+                <p:panel header="#{fato.key}">
+                    <p:panel header="Críticas">
                         <table cellpadding="10" cellspacing="0" border="1">
-                            <p:repeat value="#{tipo.value}" var="variavel">
+                            <p:repeat value="#{fato.value}" var="critica">
                                 <tr>
                                     <td>
-                                        <h:outputText value="#{variavel.key}"/>
+                                        <h:outputText value="#{critica.key}"/>
                                     </td>
                                     <td>
-                                        <h:outputText value="#{variavel.value}"/>
+                                        <h:outputText value="#{critica.value}"/>
                                     </td>
                                 </tr>
                             </p:repeat>
                         </table>
                     </p:panel>
-                </p:dataGrid>
-            </p:panel>
-            <p:panel header="Regras" toggleable="true" style="margin-bottom:20px;"/>
-            <p:panel header="Mensagens de Erro" style="margin-bottom:20px;" toggleable="true" collapsed="true">
-                <p:inputTextarea id="kieErros" cols="100" rows="5" value="#{ruleView.erros}"/>
-            </p:panel>
-            <p:panel header="DRL" toggleable="true" collapsed="true">
-                <p:inputTextarea id="codigoFonte" cols="100" rows="30" value="#{ruleView.rule}"/>
-            </p:panel>
+                    <p:panel header="Resultados">
+                        <table cellpadding="10" cellspacing="0" border="1">
+                            <p:repeat value="#{ruleView.resultados.get(fato.key)}" var="resultado">
+                                <tr>
+                                    <td>
+                                        <h:outputText value="#{resultado.key}"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{resultado.value}"/>
+                                    </td>
+                                </tr>
+                            </p:repeat>
+                        </table>
+                    </p:panel>
+                </p:panel>
+            </p:dataGrid>
+        </p:panel>
+        <p:panel header="Mensagens de Erro" style="margin-bottom:20px;" toggleable="true" collapsed="true">
+            <p:inputTextarea id="kieErros" cols="100" rows="5" value="#{ruleView.erros}"/>
+        </p:panel>
+        <p:panel header="DRL" toggleable="true" collapsed="true">
+            <p:inputTextarea id="codigoFonte" cols="100" rows="30" value="#{ruleView.rule}"/>
+        </p:panel>
 
-        </h:form>
     </ui:define>
 </ui:composition>
 </html>
