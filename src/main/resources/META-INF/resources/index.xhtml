@@ -43,36 +43,37 @@
             >
                 <p:outputPanel id="regraPanel">
                     <p:panelGrid layout="grid" columns="2">
-                        <p:outputLabel for="lblNovo" value="Editando" rendered="#{certificadoView.atual.id != null}"/>
-                        <p:outputLabel for="lblNovo" value="Novo" rendered="#{certificadoView.atual.id eq null}"/>
-                        <p:commandButton id="lblNovo" value="Salvar" action="#{certificadoView.salvar()}" ajax="false"/>
+                        <p:outputLabel for="lblNovo" value="Editando" rendered="#{ruleView.atual.idGerado ne null}"/>
+                        <p:outputLabel for="lblNovo" value="Novo" rendered="#{ruleView.atual.idGerado eq null}"/>
+                        <p:commandButton id="lblNovo" value="Salvar" action="#{ruleView.salvar()}" ajax="false"/>
 
                         <p:outputLabel for="lblid" value="Número da Regra"/>
-                        <h:outputText id="lblid" value="#{ruleView.idGerado}"/>
+                        <h:outputText id="lblid" value="#{ruleView.atual.idGerado}"/>
                         <p:outputLabel for="txtNome" value="Título"/>
-                        <p:inputText id="txtNome" value="#{ruleView.titulo}"/>
+                        <p:inputText id="txtNome" value="#{ruleView.atual.titulo}"/>
                     </p:panelGrid>
 
                     <p:panel header="Tipos" toggleable="true" style="margin-bottom:20px;" collapsed="false">
-                        <p:dataGrid value="#{ruleView.variaveis}" var="tipo" columns="12" rows="10" paginator="true"
+                        <f:facet name="footer">
+                            <p:panelGrid columns="2" cellpadding="10">
+                                <p:outputLabel value="Usar objeto de saída:"/>
+                                <p:selectOneMenu value="#{ruleView.atual.saida}">
+                                    <f:selectItems value="#{ruleView.atual.listaTipo}"/>
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                        </f:facet>
+                        <p:dataGrid value="#{ruleView.atual.listaDominio}" var="listaTipo" columns="12" rows="10"
+                                    paginator="true"
                                     paginatorAlwaysVisible="true">
-                            <f:facet name="footer">
-                                <p:panelGrid columns="2" cellpadding="10">
-                                    <p:outputLabel value="Usar objeto de saída:"/>
-                                    <p:selectOneMenu value="#{ruleView.saida}">
-                                        <f:selectItems value="#{ruleView.tipos}"/>
-                                    </p:selectOneMenu>
-                                </p:panelGrid>
-                            </f:facet>
-                            <p:panel header="#{tipo.key}">
+                            <p:panel header="#{listaTipo.key}">
                                 <table cellpadding="10" cellspacing="0" border="1">
-                                    <p:repeat value="#{tipo.value}" var="variavel">
+                                    <p:repeat value="#{listaTipo.value}" var="dominio">
                                         <tr>
                                             <td>
-                                                <h:outputText value="#{variavel.key}"/>
+                                                <h:outputText value="#{dominio.key}"/>
                                             </td>
                                             <td>
-                                                <h:outputText value="#{variavel.value}"/>
+                                                <h:outputText value="#{dominio.value}"/>
                                             </td>
                                         </tr>
                                     </p:repeat>
@@ -81,7 +82,7 @@
                         </p:dataGrid>
                     </p:panel>
                     <p:panel header="Regras" toggleable="true" style="margin-bottom:20px;" collapsed="false">
-                        <p:dataGrid value="#{ruleView.fatos}" var="fato" columns="1" rows="1" paginator="true"
+                        <p:dataGrid value="#{ruleView.atual.listaFato}" var="fato" columns="1" rows="1" paginator="true"
                                     paginatorAlwaysVisible="true">
                             <p:panel header="#{fato.key}">
                                 <p:panel header="Críticas">
@@ -100,7 +101,8 @@
                                 </p:panel>
                                 <p:panel header="Resultados">
                                     <table cellpadding="10" cellspacing="0" border="1">
-                                        <p:repeat value="#{ruleView.resultados.get(fato.key)}" var="resultado">
+                                        <p:repeat value="#{ruleView.atual.listaResultado.get(fato.key)}"
+                                                  var="resultado">
                                             <tr>
                                                 <td>
                                                     <h:outputText value="#{resultado.key}"/>
@@ -132,17 +134,17 @@
                             oncomplete="PF('regraDlg').show()"
                             icon="ui-icon-plus"
                             title="Novo"
+                            action="#{ruleView.setAtual(null)}"
                     />
-                    <!--action="#{certificadoView.setAtual(null)}"-->
                 </f:facet>
                 <p:column style="width:32px;text-align: center">
                     <p:commandButton
                             update="regraPanel"
                             oncomplete="PF('regraDlg').show()"
                             icon="ui-icon-pencil"
-                            title="Editar">
-                    </p:commandButton>
-                    <!--<f:setPropertyActionListener value="#{cert}" target="#{certificadoView.atual}"/>-->
+                            title="Editar"
+                            action="#{ruleView.carregar(rule.id)}"/>
+                    <!--<f:setPropertyActionListener value="#{rule.id}" target="#{ruleView.atual.idGerado}"/>-->
                 </p:column>
 
                 <p:column headerText="Título">
@@ -150,13 +152,13 @@
                 </p:column>
             </p:dataTable>
 
-            <p:spacer height="50"/>
-
-            <p:panel header="Mensagens de Erro" toggleable="true" collapsed="true">
-                <p:inputTextarea id="kieErros" cols="100" rows="5" value="#{ruleView.erros}"/>
-            </p:panel>
-            <p:panel header="DRL" toggleable="true" collapsed="true">
-                <p:inputTextarea id="codigoFonte" cols="100" rows="30" value="#{ruleView.rule}"/>
+            <p:panel header="Debug" toggleable="true" collapsed="true">
+                <p:panel header="Mensagens de Erro">
+                    <p:inputTextarea id="kieErros" cols="100" rows="5" value="#{ruleView.atual.erros}"/>
+                </p:panel>
+                <p:panel header="DRL">
+                    <p:inputTextarea id="codigoFonte" cols="100" rows="30" value="#{ruleView.atual.drl}"/>
+                </p:panel>
             </p:panel>
 
         </h:form>

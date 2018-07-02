@@ -26,9 +26,10 @@ package com.github.frkr.druuls.dao;
 
 import com.github.frkr.druuls.banco.Rule;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RuleRepository extends JpaRepository<Rule, Long> {
+public interface RuleRepository extends JpaRepository<Rule, Long>, RevisionRepository<Rule, Long, Integer> {
 
 }
