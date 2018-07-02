@@ -49,6 +49,7 @@ public class RuleView {
     private Map<String, Map<String, String>> fatos = new TreeMap<>();
     private Map<String, Map<String, String>> resultados = new TreeMap<>();
     private Long idGerado = 0l;
+    private String titulo = "Regra 01";
 
     @Autowired
     private RuleRepository dao;
@@ -85,8 +86,13 @@ public class RuleView {
 
         Rule rule = new Rule();
         rule.setDrl(construirDRL(new StringBuilder(), tipos, variaveis, saida, fatos, resultados));
+        rule.setTitulo(titulo);
         rule = dao.saveAndFlush(rule);
         idGerado = rule.getId();
+    }
+
+    public List<Rule> tudo() {
+        return dao.findAll();
     }
 
     //region DRL
@@ -236,6 +242,14 @@ public class RuleView {
     //endregion
 
     //region GETSET
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
     public Map<String, Map<String, String>> getFatos() {
         return fatos;
     }

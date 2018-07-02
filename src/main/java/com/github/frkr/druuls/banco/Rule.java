@@ -41,6 +41,9 @@ public class Rule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
+    public String titulo;
+
     @Lob
     @Column
     private String drl;
@@ -49,6 +52,7 @@ public class Rule {
     public String toString() {
         return "Rule{" +
                 "id=" + id +
+                ", titulo='" + titulo + '\'' +
                 '}';
     }
 
@@ -71,6 +75,14 @@ public class Rule {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public String getDrl() {
