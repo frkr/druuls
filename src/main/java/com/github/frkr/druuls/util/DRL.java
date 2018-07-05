@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.github.frkr.druuls.util.drl;
+package com.github.frkr.druuls.util;
 
 import com.github.frkr.druuls.banco.Rule;
 import com.github.frkr.druuls.dao.Entrada;

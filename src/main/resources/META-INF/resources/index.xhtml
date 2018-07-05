@@ -29,8 +29,10 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <ui:composition template="/template/template.xhtml">
     <ui:define name="conteudo">
-
         <h:form prependId="false">
+            <p:messages id="message" showDetail="true" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
 
             <p:dialog
                     widgetVar="regraDlg"
@@ -53,7 +55,7 @@
                         <p:inputText id="txtNome" value="#{ruleView.atual.titulo}"/>
                     </p:panelGrid>
 
-                    <p:panel header="Tipos" toggleable="true" style="margin-bottom:20px;" collapsed="false">
+                    <p:panel header="Tipos" toggleable="true" collapsed="false">
                         <f:facet name="footer">
                             <p:panelGrid columns="2" cellpadding="10">
                                 <p:outputLabel value="Usar objeto de saída:"/>
@@ -62,62 +64,96 @@
                                 </p:selectOneMenu>
                             </p:panelGrid>
                         </f:facet>
-                        <p:dataGrid value="#{ruleView.atual.listaDominio}" var="listaTipo" columns="12" rows="10"
-                                    paginator="true"
-                                    paginatorAlwaysVisible="true">
-                            <p:panel header="#{listaTipo.key}">
-                                <table cellpadding="10" cellspacing="0" border="1">
-                                    <p:repeat value="#{listaTipo.value}" var="dominio">
-                                        <tr>
-                                            <td>
-                                                <h:outputText value="#{dominio.key}"/>
-                                            </td>
-                                            <td>
-                                                <h:outputText value="#{dominio.value}"/>
-                                            </td>
-                                        </tr>
-                                    </p:repeat>
-                                </table>
+                        <p:dataGrid
+                                value="#{ruleView.atual.listaDominio}"
+                                var="listaDominio"
+                                rows="10"
+                                columns="12"
+                                paginator="true"
+                                paginatorAlwaysVisible="true"
+                        >
+                            <p:panel header="#{listaDominio.key}">
+                                <p:dataTable
+                                        value="#{listaDominio.value}"
+                                        var="tipo"
+                                        editable="true"
+                                >
+                                    <p:column headerText="Dominio">
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{tipo.key}"/>
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText value="#{tipo.key}"/>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Tipo">
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{tipo.value}"/>
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:selectOneMenu value="#{tipo.value}">
+                                                    <f:selectItems value="#{ruleView.listaTipo()}"/>
+                                                </p:selectOneMenu>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column style="width:32px">
+                                        <p:rowEditor/>
+                                    </p:column>
+                                </p:dataTable>
                             </p:panel>
                         </p:dataGrid>
                     </p:panel>
-                    <p:panel header="Regras" toggleable="true" style="margin-bottom:20px;" collapsed="false">
-                        <p:dataGrid value="#{ruleView.atual.listaFato}" var="fato" columns="1" rows="1" paginator="true"
-                                    paginatorAlwaysVisible="true">
-                            <p:panel header="#{fato.key}">
-                                <p:panel header="Críticas">
-                                    <table cellpadding="10" cellspacing="0" border="1">
-                                        <p:repeat value="#{fato.value}" var="critica">
-                                            <tr>
-                                                <td>
-                                                    <h:outputText value="#{critica.key}"/>
-                                                </td>
-                                                <td>
-                                                    <h:outputText value="#{critica.value}"/>
-                                                </td>
-                                            </tr>
-                                        </p:repeat>
-                                    </table>
-                                </p:panel>
-                                <p:panel header="Resultados">
-                                    <table cellpadding="10" cellspacing="0" border="1">
-                                        <p:repeat value="#{ruleView.atual.listaResultado.get(fato.key)}"
-                                                  var="resultado">
-                                            <tr>
-                                                <td>
-                                                    <h:outputText value="#{resultado.key}"/>
-                                                </td>
-                                                <td>
-                                                    <h:outputText value="#{resultado.value}"/>
-                                                </td>
-                                            </tr>
-                                        </p:repeat>
-                                    </table>
-                                </p:panel>
+                    <p:spacer height="20"/>
+                    <p:panel header="Regras" toggleable="true" collapsed="false">
+                        <p:dataGrid
+                                value="#{ruleView.atual.listaFato}"
+                                var="fato"
+                                columns="1"
+                                rows="1"
+                                paginator="true"
+                                paginatorAlwaysVisible="true"
+                        >
+                            <p:panel header="Fato: #{fato.key}">
+                                <p:dataTable
+                                        value="#{fato.value}"
+                                        var="critica"
+                                >
+                                    <f:facet name="header">
+                                        <h:outputText value="Críticas"/>
+                                    </f:facet>
+                                    <p:column headerText="Domínio">
+                                        <h:outputText value="#{critica.key}"/>
+                                    </p:column>
+                                    <p:column headerText="Condição">
+                                        <h:outputText value="#{critica.value}"/>
+                                    </p:column>
+                                </p:dataTable>
+                                <p:dataTable
+                                        value="#{ruleView.atual.listaResultado.get(fato.key)}"
+                                        var="resultado"
+                                >
+                                    <f:facet name="header">
+                                        <h:outputText value="Resultados"/>
+                                    </f:facet>
+                                    <p:column headerText="Atualizar">
+                                        <h:outputText value="#{resultado.key}"/>
+                                    </p:column>
+                                    <p:column headerText="Dados">
+                                        <h:outputText value="#{resultado.value}"/>
+                                    </p:column>
+                                    <p:column style="width:32px">
+                                        <p:rowEditor/>
+                                    </p:column>
+                                </p:dataTable>
                             </p:panel>
                         </p:dataGrid>
                     </p:panel>
                 </p:outputPanel>
+                <p:spacer height="20"/>
             </p:dialog>
             <p:dataTable
                     rows="100"
@@ -152,13 +188,9 @@
                 </p:column>
             </p:dataTable>
 
-            <p:panel header="Debug" toggleable="true" collapsed="true">
-                <p:panel header="Mensagens de Erro">
-                    <p:inputTextarea id="kieErros" cols="100" rows="5" value="#{ruleView.atual.erros}"/>
-                </p:panel>
-                <p:panel header="DRL">
-                    <p:inputTextarea id="codigoFonte" cols="100" rows="30" value="#{ruleView.atual.drl}"/>
-                </p:panel>
+            <p:spacer height="20"/>
+            <p:panel header="Debug">
+                <p:inputTextarea id="codigoFonte" cols="100" rows="30" value="#{ruleView.atual.drl}"/>
             </p:panel>
 
         </h:form>

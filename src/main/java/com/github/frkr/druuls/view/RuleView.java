@@ -26,16 +26,15 @@ package com.github.frkr.druuls.view;
 
 import com.github.frkr.druuls.banco.Rule;
 import com.github.frkr.druuls.dao.RuleRepository;
-import com.github.frkr.druuls.util.drl.DRL;
+import com.github.frkr.druuls.util.DRL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import java.util.*;
 
 @Component
 @SessionScope
@@ -86,13 +85,21 @@ public class RuleView {
         try {
             Rule rule = dao.findById(id).get();
             atual = new DRL(rule);
+            if (!"".equals(atual.getErros())) {
+                throw new Exception(atual.getErros());
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // TODO logger
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Drools", e.getMessage()));
         }
     }
 
     public List<Rule> tudo() {
         return dao.findAll();
+    }
+
+    public Set<String> listaTipo() {
+        return DRL.constTipos;
     }
 
     //region GETSET
