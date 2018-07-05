@@ -22,14 +22,28 @@
  * SOFTWARE.
  */
 
-package com.github.frkr.druuls.dao;
+/*
+ * NO LICENSE
+ */
 
-import com.github.frkr.druuls.banco.Rule;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.history.RevisionRepository;
-import org.springframework.stereotype.Repository;
+package com.github.frkr.druuls.util;
 
-@Repository
-public interface RuleRepository extends JpaRepository<Rule, Long>, RevisionRepository<Rule, Long, Integer> {
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Service;
 
+@Service
+public class AutowireHelper implements ApplicationContextAware {
+
+    private static ApplicationContext context;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        context = applicationContext;
+    }
+
+    public static <T> T getBean(Class<T> beanClass) {
+        return context.getBean(beanClass);
+    }
 }
